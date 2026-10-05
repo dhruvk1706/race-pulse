@@ -78,7 +78,7 @@ export function Sidebar({ open, onClose, onNavigate }: { open: boolean; onClose:
           ))}
           <button className="nav-item settings-item" disabled title="Settings will be available in a future update"><Settings size={24} strokeWidth={2.2} aria-hidden="true" /><span>Settings</span></button>
         </nav>
-        <div className="sidebar-art" aria-hidden="true" />
+        
         <p className="sidebar-tagline">FASTER<br />INSIGHTS.<br />BRIGHTER<br />RACES.</p>
       </aside>
     </>

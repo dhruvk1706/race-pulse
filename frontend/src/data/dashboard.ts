@@ -48,9 +48,9 @@ export const timing: TimingEntry[] = [
 ];
 
 export const strategyAlerts = [
-  { id: "undercut", kind: "undercut", title: "Undercut Window Open", description: "Drivers on medium tyres can pit now and rejoin ahead of projected window.", age: "2 min ago", color: "red" },
-  { id: "pit-stop", kind: "pit-stop", title: "Pit Stop Prediction", description: "High probability of a 1-stop strategy. Optimal pit window: Lap 20 – 26.", age: "6 min ago", color: "amber" },
-  { id: "safety-car", kind: "safety-car", title: "Safety Car Probability", description: "Increased to 28% due to debris at Turn 11. Monitor closely.", age: "9 min ago", color: "red" },
+  { id: "undercut", kind: "undercut", action: "Pit Now", title: "Undercut window open", description: "Box this lap on mediums to protect the undercut.", age: "2 min ago", color: "red" },
+  { id: "pit-stop", kind: "pit-stop", action: "Stay Out", title: "One-stop window ahead", description: "Hold position. Target a stop on laps 20–26.", age: "6 min ago", color: "neutral" },
+  { id: "safety-car", kind: "safety-car", action: "Watch", title: "Safety car probability", description: "Monitor Turn 11 debris. Safety car chance: 28%.", age: "9 min ago", color: "amber" },
 ] as const;
 
 export interface NewsStory {

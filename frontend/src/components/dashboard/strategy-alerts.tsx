@@ -8,5 +8,25 @@ function UndercutIcon() {
 }
 
 export function StrategyAlerts() {
-  return <Panel id="strategy-alerts" title="STRATEGY ALERTS" icon={Timer} className="strategy-panel" action={<Badge>3 NEW</Badge>}><div className="alerts-list">{strategyAlerts.map((alert) => <article className={`strategy-alert ${alert.color}`} key={alert.id}><div className="alert-icon">{alert.kind === "undercut" ? <UndercutIcon /> : alert.kind === "pit-stop" ? <div className="pit-icon"><CircleDot size={35} strokeWidth={2.8} /><Crosshair size={21} /></div> : <TriangleAlert size={36} strokeWidth={2.1} />}</div><div className="alert-content"><div className="alert-title"><h3>{alert.title}</h3><span>{alert.age}</span></div><p>{alert.description}</p></div></article>)}</div></Panel>;
+  return (
+    <Panel id="strategy-alerts" title="STRATEGY ALERTS" icon={Timer} className="strategy-panel" action={<Badge>3 NEW</Badge>}>
+      <div className="alerts-list">
+        {strategyAlerts.map((alert) => (
+          <article className={`strategy-alert ${alert.color}`} key={alert.id} aria-labelledby={`alert-${alert.id}`}>
+            <div className="alert-icon" aria-hidden="true">
+              {alert.kind === "undercut" ? <UndercutIcon /> : alert.kind === "pit-stop" ? <div className="pit-icon"><CircleDot size={35} strokeWidth={2.8} /><Crosshair size={21} /></div> : <TriangleAlert size={36} strokeWidth={2.1} />}
+            </div>
+            <div className="alert-content">
+              <div className="alert-meta">
+                <span className="strategy-action">{alert.action}</span>
+                <span className="alert-age">{alert.age}</span>
+              </div>
+              <h3 id={`alert-${alert.id}`}>{alert.title}</h3>
+              <p>{alert.description}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </Panel>
+  );
 }
