@@ -2,15 +2,15 @@
 
 ## Project Structure & Module Organization
 
-The UI lives in `frontend/`; all data fetching lives in `backend/`, a dependency-light Node/TypeScript service (`cd backend && npm run dev`, port 4000). The frontend proxies `/api/f1/*` to it via Next rewrites.
+The UI lives in `frontend/`; all data fetching lives in `backend/`, a FastAPI service on Python 3.11 (port 4000). The frontend proxies `/api/f1/*` to it via Next rewrites.
 
-- `backend/src/` holds `server.ts` (routes), `weekend.ts` and `dashboard.ts` (loaders, normalization, response types), `http.ts` (OpenF1 spacing and 429 retry), and `cache.ts`. Run `npm run typecheck` there too.
+- `backend/app/` holds `main.py` (routes), `weekend.py` and `dashboard.py` (loaders, normalization, Pydantic response models), `openf1.py` (HTTP, OpenF1 spacing and 429 retry), and `cache.py`. Tests live in `backend/tests/`; `backend/Dockerfile` serves it on port 4000.
 
 - `frontend/src/app/` contains the Next.js App Router page, root layout, metadata, favicon, and global Tailwind styles.
 - `frontend/src/components/dashboard/` contains individual dashboard sections and navigation. Shared panels, badges, and dialogs belong in `frontend/src/components/ui/`.
-- `frontend/src/lib/f1/` holds only response types and display formatting; they mirror the backend's response types, so update both together. Keep data separate from presentation.
+- `frontend/src/lib/f1/` holds only response types and display formatting; they mirror the backend's Pydantic models (camelCase fields), so update both together. Keep data separate from presentation.
 - `frontend/public/images/` contains local placeholder photography; `ASSETS.md` records image provenance and generation prompts.
-- `.openai/hosting.json` identifies the private Site. Root `out/` contains ignored deployment output; no test directory exists yet.
+- `.openai/hosting.json` identifies the private Site. Root `out/` contains ignored deployment output.
 
 ## Build, Test, and Development Commands
 
@@ -24,6 +24,15 @@ npm start              # Serve the completed production build
 npm run build:sites    # Export and stage the static Sites build
 ```
 
+```sh
+cd backend
+python -m venv .venv   # Python 3.11; activate with .venv/bin/activate (Windows: .venv\Scriptsctivate)
+pip install -r requirements.txt
+uvicorn app.main:app --reload --host 127.0.0.1 --port 4000
+python -m pytest       # Backend unit tests
+docker build -t race-pulse-backend .   # Container serving 0.0.0.0:4000
+```
+
 Development and production builds use webpack. Update `package-lock.json` whenever dependency requirements change.
 
 ## Coding Style & Naming Conventions
@@ -34,7 +43,7 @@ Prefer reusable components, explicit types, and narrowly scoped client state. Ad
 
 ## Testing Guidelines
 
-No automated test framework, `npm test`, or coverage threshold is configured. Run type checking and a production build before submitting changes. Verify the rendered dashboard at desktop and mobile widths, checking overflow, navigation, search, tabs, and dialogs. Include keyboard and Escape-key checks for interactive controls.
+The backend uses pytest (`cd backend && python -m pytest`, files named `tests/test_*.py`); the frontend has no test framework, `npm test`, or coverage threshold. Run `python -m pytest`, frontend type checking, and a production build before submitting changes. Verify the rendered dashboard at desktop and mobile widths, checking overflow, navigation, search, tabs, and dialogs. Include keyboard and Escape-key checks for interactive controls.
 
 If introducing automated tests, document the framework and command. Use `*.test.ts` or `*.test.tsx` for component/module tests and `frontend/tests/*.spec.ts` for browser tests.
 

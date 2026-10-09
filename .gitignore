@@ -9,3 +9,6 @@ output/
 .playwright-cli/
 
 .next-sites/
+.venv/
+__pycache__/
+.pytest_cache/
