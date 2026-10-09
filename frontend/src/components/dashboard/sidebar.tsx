@@ -5,8 +5,8 @@ import { useEffect, useRef, useState } from "react";
 
 const navigation = [
   { label: "Dashboard", icon: House, target: "dashboard" },
-  { label: "Live Race", icon: Activity, target: "live-timing" },
-  { label: "Strategy Center", icon: ChartNoAxesColumnIncreasing, target: "strategy-alerts" },
+  { label: "Session Results", icon: Activity, target: "live-timing" },
+  { label: "Race Control", icon: ChartNoAxesColumnIncreasing, target: "strategy-alerts" },
   { label: "News", icon: Newspaper, target: "latest-news" },
   { label: "Drivers", icon: CircleUserRound, target: "championship" },
   { label: "Teams", icon: UsersRound, target: "championship" },

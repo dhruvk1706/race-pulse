@@ -2,16 +2,20 @@
 
 import { Bell, ChevronDown, Menu, Search, X } from "lucide-react";
 import { useState } from "react";
-import { news, timing, raceWeekend } from "@/data/dashboard";
+import type { DashboardResponse } from "@/lib/f1/dashboard";
+import type { WeekendMeeting } from "@/lib/f1/weekend";
 
-export function Topbar({ onMenuClick, navigationOpen }: { onMenuClick: () => void; navigationOpen: boolean }) {
+export function Topbar({ onMenuClick, navigationOpen, meeting, data }: { onMenuClick: () => void; navigationOpen: boolean; meeting: WeekendMeeting | null; data: DashboardResponse | null }) {
+  const timing = data?.snapshot?.timing ?? [];
+  const news = data?.news ?? [];
   const [query, setQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const term = query.trim().toLowerCase();
   const results = term ? [
     ...timing.filter((entry) => `${entry.driver} ${entry.fullName} ${entry.team}`.toLowerCase().includes(term)).map((entry) => ({ label: entry.fullName, detail: entry.team, target: "live-timing" })),
-    ...news.filter((story) => story.title.toLowerCase().includes(term)).map((story) => ({ label: story.title, detail: "News", target: "latest-news" })),
-    ...(`${raceWeekend.name} ${raceWeekend.circuit} ${raceWeekend.location}`.toLowerCase().includes(term) ? [{ label: raceWeekend.name, detail: raceWeekend.circuit, target: "race-weekend" }] : []),
+    ...(data?.drivers ?? []).filter((entry) => entry.name.toLowerCase().includes(term)).map((entry) => ({ label: entry.name, detail: "Championship standings", target: "championship" })),
+    ...news.filter((story) => story.title.toLowerCase().includes(term)).map((story) => ({ label: story.title, detail: "BBC Sport", target: "latest-news" })),
+    ...(meeting && `${meeting.name} ${meeting.circuit} ${meeting.location} ${meeting.country}`.toLowerCase().includes(term) ? [{ label: meeting.name, detail: meeting.circuit, target: "race-weekend" }] : []),
   ].slice(0, 7) : [];
 
   return (
@@ -28,9 +32,9 @@ export function Topbar({ onMenuClick, navigationOpen }: { onMenuClick: () => voi
         </div>}
       </div>
       <div className="topbar-account">
-        <a className="notification-button icon-button" href="#strategy-alerts" aria-label="View 3 new strategy alerts"><Bell size={22} strokeWidth={1.7} /><span aria-hidden="true" /></a>
+        <a className="notification-button icon-button" href="#strategy-alerts" aria-label="View race-control messages"><Bell size={22} strokeWidth={1.7} /></a>
         <span className="topbar-divider" />
-        <div className="profile" aria-label="Jordan Davis profile"><span className="avatar">JD</span><span className="profile-name">Jordan Davis</span><ChevronDown size={17} aria-hidden="true" /></div>
+        <div className="profile" aria-label="Race Pulse"><span className="avatar">RP</span><span className="profile-name">Race Pulse</span><ChevronDown size={17} aria-hidden="true" /></div>
       </div>
     </header>
   );

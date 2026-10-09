@@ -11,8 +11,8 @@ import "@fontsource/exo-2/800-italic.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Race Pulse — Japanese Grand Prix",
-  description: "Your race-weekend command center. Live timing, strategy insights, and the latest from Suzuka.",
+  title: "Race Pulse — Grand Prix Dashboard",
+  description: "Your race-weekend command center with current Grand Prix session times.",
 };
 
 export const viewport: Viewport = { themeColor: "#080c0f" };

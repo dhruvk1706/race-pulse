@@ -2,11 +2,13 @@
 
 ## Project Structure & Module Organization
 
-The application lives in `frontend/`.
+The UI lives in `frontend/`; all data fetching lives in `backend/`, a dependency-light Node/TypeScript service (`cd backend && npm run dev`, port 4000). The frontend proxies `/api/f1/*` to it via Next rewrites.
+
+- `backend/src/` holds `server.ts` (routes), `weekend.ts` and `dashboard.ts` (loaders, normalization, response types), `http.ts` (OpenF1 spacing and 429 retry), and `cache.ts`. Run `npm run typecheck` there too.
 
 - `frontend/src/app/` contains the Next.js App Router page, root layout, metadata, favicon, and global Tailwind styles.
 - `frontend/src/components/dashboard/` contains individual dashboard sections and navigation. Shared panels, badges, and dialogs belong in `frontend/src/components/ui/`.
-- `frontend/src/data/dashboard.ts` holds typed mock race, driver, championship, news, session, and weather data. Keep data separate from presentation.
+- `frontend/src/lib/f1/` holds only response types and display formatting; they mirror the backend's response types, so update both together. Keep data separate from presentation.
 - `frontend/public/images/` contains local placeholder photography; `ASSETS.md` records image provenance and generation prompts.
 - `.openai/hosting.json` identifies the private Site. Root `out/` contains ignored deployment output; no test directory exists yet.
 
@@ -44,4 +46,4 @@ Keep pull requests focused. Describe the change, link relevant issues, list veri
 
 ## Scope & Configuration
 
-Maintain the current mock-only scope. Do not add APIs, authentication, databases, live F1 integrations, official racing logos, or unrelated features without explicit direction. Never commit secrets or local environment files.
+Maintain the real-data scope explicitly requested by the user. Fetch race data from OpenF1, standings from Jolpica, and headlines from BBC Sport. Never restore fictional data or use mock fallback values. Label historical sessions and unavailable sources clearly. Do not add authentication, databases, official racing logos, or unrelated features without explicit direction. Never commit secrets or local environment files.

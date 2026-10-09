@@ -1,6 +1,6 @@
 import type { KeyboardEvent } from "react";
 
-export function handleTabKeyDown<T extends string>(
+export function handleTabKeyDown<T extends string | number>(
   event: KeyboardEvent<HTMLButtonElement>,
   index: number,
   tabs: readonly T[],
