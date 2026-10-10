@@ -13,7 +13,7 @@ export function LiveTiming({ snapshot, loading, upcoming = false }: { snapshot: 
   const [fullTiming, setFullTiming] = useState(false);
   const label = snapshot ? `${snapshot.circuit} · ${snapshot.name}` : "Session results";
   return <><Panel id="live-timing" title="SESSION RESULTS" icon={Timer} className="live-timing-panel" action={<button className="text-action" disabled={!snapshot?.timing.length} onClick={() => setFullTiming(true)}>View Full Timing <ArrowRight size={16} /></button>}>
-    <p className="real-data-meta">{snapshot ? `${label} · Completed session · ${formatSessionTimestamp(snapshot.date)} · OpenF1` : loading ? "Loading session results…" : upcoming ? "This session has not started yet. Results appear once it is completed." : "Session data unavailable. Try refreshing."}</p>
+    <p className="real-data-meta">{snapshot ? `${label} · Completed session · ${formatSessionTimestamp(snapshot.date)}` : loading ? "Loading session results…" : upcoming ? "This session has not started yet. Results appear once it is completed." : "Session data unavailable. Try refreshing."}</p>
     {snapshot?.timing.length ? <TimingTable entries={snapshot.timing.slice(0, 10)} /> : snapshot && <p className="data-empty">Results have not been published or could not be loaded.</p>}
-  </Panel><Modal title={label} open={fullTiming} onClose={() => setFullTiming(false)}><p className="detail-meta">Completed session · OpenF1{snapshot && ` · ${formatSessionTimestamp(snapshot.date)}`}</p><TimingTable entries={snapshot?.timing ?? []} /></Modal></>;
+  </Panel><Modal title={label} open={fullTiming} onClose={() => setFullTiming(false)}><p className="detail-meta">Completed session{snapshot && ` · ${formatSessionTimestamp(snapshot.date)}`}</p><TimingTable entries={snapshot?.timing ?? []} /></Modal></>;
 }

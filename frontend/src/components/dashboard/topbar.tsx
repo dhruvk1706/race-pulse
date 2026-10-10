@@ -14,7 +14,7 @@ export function Topbar({ onMenuClick, navigationOpen, meeting, data }: { onMenuC
   const results = term ? [
     ...timing.filter((entry) => `${entry.driver} ${entry.fullName} ${entry.team}`.toLowerCase().includes(term)).map((entry) => ({ label: entry.fullName, detail: entry.team, target: "live-timing" })),
     ...(data?.drivers ?? []).filter((entry) => entry.name.toLowerCase().includes(term)).map((entry) => ({ label: entry.name, detail: "Championship standings", target: "championship" })),
-    ...news.filter((story) => story.title.toLowerCase().includes(term)).map((story) => ({ label: story.title, detail: "BBC Sport", target: "latest-news" })),
+    ...news.filter((story) => story.title.toLowerCase().includes(term)).map((story) => ({ label: story.title, detail: "News", target: "latest-news" })),
     ...(meeting && `${meeting.name} ${meeting.circuit} ${meeting.location} ${meeting.country}`.toLowerCase().includes(term) ? [{ label: meeting.name, detail: meeting.circuit, target: "race-weekend" }] : []),
   ].slice(0, 7) : [];
 

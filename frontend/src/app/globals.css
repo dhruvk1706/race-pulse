@@ -619,3 +619,58 @@ button { border: 0; }
   .session-tabs button { padding: 0 8px; min-width: 0; }
   .race-hero .hero-main { padding-left: 44px; padding-right: 44px; }
 }
+
+/* Strategy alerts tabs + replay panel */
+.panel-tabs { margin: 0 11px 10px; }
+.strategy-tabpanel { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.dashboard-shell:has(.has-replay) { height: auto; }
+@media (min-width: 1201px) {
+  .dashboard-content.has-replay { grid-template-rows: 192px auto minmax(332px, 1.35fr) auto minmax(247px, 1fr); }
+}
+.strategy-replay-panel { padding-bottom: 14px; }
+.lap-scrubber { display: flex; align-items: center; gap: 12px; padding: 0 17px 10px; }
+.lap-scrubber label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.4px; }
+.lap-scrubber input { flex: 1; min-width: 0; accent-color: var(--red); height: 24px; cursor: pointer; }
+.lap-scrubber output { min-width: 64px; text-align: right; color: var(--text); font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.driver-picker { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 17px 12px; }
+.driver-picker button { display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px; border: 1px solid #293139; border-radius: 4px; background: transparent; color: #93a0ae; font-size: 12px; font-weight: 600; }
+.driver-picker button[aria-pressed="true"] { color: #fff; border-color: #ff26354d; background: linear-gradient(110deg, #740e203d, #45101b26); }
+.driver-picker button:hover:not(:disabled) { color: #fff; }
+.driver-picker button:disabled { opacity: 0.4; cursor: not-allowed; }
+.team-swatch { display: inline-block; width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+.strategy-charts { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 12px; padding: 0 12px; }
+.strategy-chart { min-width: 0; margin: 0; padding: 10px 8px 6px; border: 1px solid #202930; border-radius: 6px; background: #11171c; }
+.strategy-chart figcaption { padding: 0 6px 6px; font-size: 13px; font-weight: 600; }
+.strategy-chart figcaption span { margin-left: 6px; color: var(--muted); font-weight: 400; font-size: 12px; }
+.chart-frame { min-width: 0; }
+.compound-legend { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 6px 0 0; padding: 0 6px; list-style: none; color: var(--muted); font-size: 12px; text-transform: capitalize; }
+.compound-legend li { display: inline-flex; align-items: center; gap: 5px; }
+@media (max-width: 900px) {
+  .strategy-charts { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 700px) {
+  .lap-scrubber, .driver-picker { padding-left: 14px; padding-right: 14px; }
+  .strategy-charts { padding: 0 10px; }
+}
+
+button.upcoming-session.is-clickable { width: 100%; font: inherit; color: inherit; text-align: left; cursor: pointer; border-top: 0; border-right: 0; }
+button.upcoming-session.is-clickable:hover, button.upcoming-session.is-clickable:focus-visible { background: #1b232866; }
+
+/* Ask the strategist: the shared dialog, docked as a right-hand drawer. */
+.detail-dialog.ask-drawer { margin: 0 0 0 auto; width: min(440px, 100vw); max-width: 100vw; height: 100svh; max-height: 100svh; border-radius: 0; border-width: 0 0 0 1px; }
+.ask-drawer[open] { display: flex; flex-direction: column; }
+.ask-drawer .dialog-body { display: flex; flex-direction: column; flex: 1; min-height: 0; padding-bottom: 18px; }
+.ask-log { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; margin: 0 -4px 14px; padding: 0 4px; }
+.ask-log .data-empty { padding: 0; }
+.ask-turn { display: flex; flex-direction: column; gap: 8px; }
+.ask-question { align-self: flex-end; max-width: 88%; margin: 0; padding: 9px 12px; background: #1a2229; border-radius: 8px 8px 2px 8px; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
+.ask-question span { display: block; color: var(--muted); font-size: 11px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }
+.ask-answer { margin: 0; padding: 10px 12px; border-left: 2px solid var(--red); background: #ffffff05; border-radius: 2px 8px 8px 2px; font-size: 14px; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }
+.ask-answer.error { border-left-color: #ffd12e; color: #e8d9a8; }
+.ask-form { display: flex; flex-direction: column; gap: 8px; }
+.ask-form textarea { width: 100%; resize: none; font: inherit; font-size: 14px; color: var(--text); background: #080d10; border: 1px solid #303a44; border-radius: 6px; padding: 10px 12px; }
+.ask-form textarea:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+.ask-form-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 12px; }
+.ask-send { display: inline-flex; align-items: center; gap: 7px; flex-shrink: 0; padding: 8px 14px; background: var(--red); color: white; border-radius: 5px; font-size: 14px; font-weight: 600; }
+.ask-send:disabled { background: #3a2328; color: #b9a3a7; }
+.text-action:disabled { opacity: .45; }
