@@ -330,7 +330,7 @@ async def _build(session_key: int | None) -> DashboardResponse:
     )
 
 
-_cache = create_cache(60)
+_cache = create_cache(60, persist=("dashboard", DashboardResponse))
 
 
 # A partly failed response is returned but not cached, and never replaces a good one.

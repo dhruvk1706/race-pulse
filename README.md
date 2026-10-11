@@ -58,7 +58,7 @@ The desktop layout follows the reference's sidebar, shallow hero, two card rows,
 ## Deploying the backend (Cloud Run)
 
 ```bash
-gcloud run deploy race-pulse-backend --project=race-pulse-445625019 --region=asia-south1 --source=backend   --port=4000 --allow-unauthenticated --max-instances=2 --memory=1Gi --set-env-vars=GOOGLE_CLOUD_PROJECT=race-pulse-445625019
+gcloud run deploy race-pulse-backend --project=race-pulse-445625019 --region=asia-south1 --source=backend   --port=4000 --allow-unauthenticated --max-instances=2 --memory=1Gi --set-env-vars=GOOGLE_CLOUD_PROJECT=race-pulse-445625019,CACHE_BUCKET=race-pulse-cache-445625019
 ```
 
-The default compute service account holds `roles/aiplatform.user`, so Vertex needs no keys. Point the frontend at the service with `BACKEND_URL=https://race-pulse-backend-179488902237.asia-south1.run.app`. The ask rate limit and daily cap are per instance.
+The default compute service account holds `roles/aiplatform.user`, so Vertex needs no keys. It also holds `roles/storage.objectAdmin` on the private `CACHE_BUCKET` bucket, where the dashboard and weekend responses are saved so a cold instance can still serve them while OpenF1 blocks anonymous access during live sessions. Without `CACHE_BUCKET` (local dev) nothing is persisted. Point the frontend at the service with `BACKEND_URL=https://race-pulse-backend-179488902237.asia-south1.run.app`. The ask rate limit and daily cap are per instance.

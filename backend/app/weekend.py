@@ -203,8 +203,8 @@ async def _load_base() -> WeekendResponse:
     return WeekendResponse(meeting=meeting, sessions=sessions, meetings=calendar if in_calendar else [*calendar, meeting])
 
 
-_base_cache = create_cache(5 * 60)
-_sessions_cache = create_cache(5 * 60)
+_base_cache = create_cache(5 * 60, persist=("weekend-base", WeekendResponse))
+_sessions_cache = create_cache(5 * 60, persist=("weekend-sessions", list[WeekendSession]))
 
 
 async def load_weekend(meeting_key: int | None = None) -> WeekendResponse | None:
