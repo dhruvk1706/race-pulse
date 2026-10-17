@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: backend/requirements-dev.txt
+      - run: pip install -r requirements-dev.txt
+      - run: python -m pytest
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run build
+
+  # Runs only after WIF_PROVIDER and WIF_SERVICE_ACCOUNT repo variables are set (see README).
+  deploy:
+    needs: [backend, frontend]
+    if: github.event_name == 'push' && vars.WIF_PROVIDER != ''
+    runs-on: ubuntu-latest
+    concurrency: deploy-backend
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.WIF_PROVIDER }}
+          service_account: ${{ vars.WIF_SERVICE_ACCOUNT }}
+      - uses: google-github-actions/setup-gcloud@v2
+      - run: >
+          gcloud run deploy race-pulse-backend
+          --project=race-pulse-445625019 --region=asia-south1 --source=backend
+          --port=4000 --allow-unauthenticated --max-instances=2 --memory=1Gi
+          --update-env-vars=GOOGLE_CLOUD_PROJECT=race-pulse-445625019,CACHE_BUCKET=race-pulse-cache-445625019

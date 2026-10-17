@@ -62,3 +62,19 @@ gcloud run deploy race-pulse-backend --project=race-pulse-445625019 --region=asi
 ```
 
 The default compute service account holds `roles/aiplatform.user`, so Vertex needs no keys. It also holds `roles/storage.objectAdmin` on the private `CACHE_BUCKET` bucket, where the dashboard and weekend responses are saved so a cold instance can still serve them while OpenF1 blocks anonymous access during live sessions. Without `CACHE_BUCKET` (local dev) nothing is persisted. Point the frontend at the service with `BACKEND_URL=https://race-pulse-backend-179488902237.asia-south1.run.app`. The ask rate limit and daily cap are per instance.
+
+### Automatic deploys (GitHub Actions)
+
+`.github/workflows/ci.yml` redeploys the backend after tests pass on `main`, once two repo variables (Settings > Secrets and variables > Actions > Variables) are set: `WIF_PROVIDER` and `WIF_SERVICE_ACCOUNT`. One-time setup, run by you:
+
+```bash
+P=race-pulse-445625019; N=179488902237; SA=gh-deploy@$P.iam.gserviceaccount.com
+gcloud iam service-accounts create gh-deploy --project=$P
+gcloud iam workload-identity-pools create github --project=$P --location=global
+gcloud iam workload-identity-pools providers create-oidc github --project=$P --location=global --workload-identity-pool=github --issuer-uri=https://token.actions.githubusercontent.com --attribute-mapping=google.subject=assertion.sub,attribute.repository=assertion.repository --attribute-condition="assertion.repository=='dhruvk1706/race-pulse'"
+gcloud iam service-accounts add-iam-policy-binding $SA --project=$P --role=roles/iam.workloadIdentityUser --member="principalSet://iam.googleapis.com/projects/$N/locations/global/workloadIdentityPools/github/attribute.repository/dhruvk1706/race-pulse"
+for r in run.admin cloudbuild.builds.editor storage.admin artifactregistry.writer serviceusage.serviceUsageConsumer; do gcloud projects add-iam-policy-binding $P --member=serviceAccount:$SA --role=roles/$r; done
+gcloud iam service-accounts add-iam-policy-binding $N-compute@developer.gserviceaccount.com --project=$P --member=serviceAccount:$SA --role=roles/iam.serviceAccountUser
+```
+
+Then set `WIF_PROVIDER=projects/179488902237/locations/global/workloadIdentityPools/github/providers/github` and `WIF_SERVICE_ACCOUNT=gh-deploy@race-pulse-445625019.iam.gserviceaccount.com`. Source deploys may need extra roles on first run; the job log names any missing one.
